@@ -22,7 +22,7 @@
             <h4>In Progress: Raumschiffgesellschafts Portal</h4>
             <ul>
                 <li><a href="index.jsp">Anmelden</a></li>
-                <li><a href="index.jsp">Meine Flüge</a></li>
+                <li><a href="index.jsp">Meine Flüge - test </a></li>
                 <li><a href="index.jsp">Registrieren</a></li>
                 <li><a href="Fluege-Suchen.jsp">Flüge suchen</a></li>
                 <li><a href="Fluege-Buchen.jsp">Flüge buchen</a></li>
