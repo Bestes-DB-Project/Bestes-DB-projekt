@@ -20,13 +20,13 @@ public class Buchung implements Serializable {
   private Integer buchungsNr;
   private Integer klasse;
   private Date buchungsdatum;
-  private Integer SVNr;
+  private Long SVNr;
   private Integer FlugNr;
   
   //No arguments constructor required for entity class
   public Buchung(){}
   
-  public Buchung(Integer klasse, Date buchungsdatum, Integer SVNr, Integer FlugNr) {
+  public Buchung(Integer klasse, Date buchungsdatum, Long SVNr, Integer FlugNr) {
     this.klasse = klasse;
     this.buchungsdatum = buchungsdatum;
     this.SVNr = SVNr;
@@ -53,11 +53,11 @@ public class Buchung implements Serializable {
     this.buchungsdatum = buchungsdatum;
   }  
 
-  public Integer getSVNr() {
+  public Long getSVNr() {
     return SVNr;
   }
 
-  public void setSVNr(Integer SVNr) {
+  public void setSVNr(Long SVNr) {
     this.SVNr = SVNr;
   }  
 

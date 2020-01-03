@@ -16,13 +16,13 @@ public class Passagier implements Serializable {
   @Id
   @GeneratedValue
   private Integer PasNr;
-  private Integer SVNr;
+  private Long SVNr;
 
 
   //No arguments constructor required for entity class
   public Passagier(){}
   
-  public Passagier(Integer SVNr) {
+  public Passagier(Long SVNr) {
     this.SVNr = SVNr;
   }
   
@@ -30,11 +30,11 @@ public class Passagier implements Serializable {
     return PasNr;
   }
  
-  public Integer getSVNr() {
+  public Long getSVNr() {
     return SVNr;
   }
 
-  public void setSVNr(Integer SVNr) {
+  public void setSVNr(Long SVNr) {
     this.SVNr = SVNr;
   }
   

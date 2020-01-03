@@ -57,7 +57,7 @@ public class FluegeBuchen extends HttpServlet {
     PrintWriter pw = resp.getWriter();
     
 
-    Integer SVNr = Integer.parseInt(req.getParameter("SVNr"));
+    Long SVNr = Long.parseLong(req.getParameter("SVNr"));
     String vorname = req.getParameter("Vorname");
     String nachname = req.getParameter("Nachname");
     Person person = new Person(SVNr, vorname, nachname);
@@ -132,7 +132,7 @@ public class FluegeBuchen extends HttpServlet {
     con = ds.getConnection();
     String sqlStr = "INSERT INTO passagier (SVNr) VALUES (?)";
       PreparedStatement ps = con.prepareStatement(sqlStr);
-      ps.setInt(1, passagier.getSVNr());
+      ps.setLong(1, passagier.getSVNr());
       int count = ps.executeUpdate();
       if (count != 1) {
         throw new PersistenceException("Unbekannter Fehler beim Speichern des neuen Passagiers (updateCount = 0).");
@@ -160,9 +160,9 @@ public class FluegeBuchen extends HttpServlet {
     con = ds.getConnection();
     String sqlStr = "INSERT INTO person (SVNr, Vorname, Nachname) VALUES (?,?,?)";
       PreparedStatement ps = con.prepareStatement(sqlStr);
-      ps.setInt(1, person.getSVNr());
+      ps.setLong(1, person.getSVNr());
       ps.setString(2, person.getVorname());
-      ps.setString(3, person.getNnachname());
+      ps.setString(3, person.getNachname());
       int count = ps.executeUpdate();
       if (count != 1) {
         throw new PersistenceException("Unbekannter Fehler beim Speichern des neuen Person (updateCount = 0).");
@@ -193,7 +193,7 @@ public class FluegeBuchen extends HttpServlet {
       PreparedStatement ps = con.prepareStatement(sqlStr);
       ps.setInt(1, buchung.getKlasse());
       ps.setDate(2, buchung.getBuchungsdatum());
-      ps.setInt(3, buchung.getSVNr());
+      ps.setLong(3, buchung.getSVNr());
       ps.setInt(4, buchung.getFlugNr());
       int count = ps.executeUpdate();
       if (count != 1) {

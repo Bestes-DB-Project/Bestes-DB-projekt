@@ -23,7 +23,7 @@
             <ul>
                 <li><a href="index.jsp">Anmelden</a></li>
                 <li><a href="index.jsp">Meine Flüge</a></li>
-                <li><a href="index.jsp">Registrieren</a></li>
+                <li><a href="Regristrieren.jsp">Registrieren</a></li>
                 <li><a href="index.jsp">Flüge suchen</a></li>
                 <li><a href="Fluege-Buchen.jsp">Flüge buchen</a></li>
                 <br>

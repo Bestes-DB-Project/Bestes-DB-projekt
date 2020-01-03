@@ -24,6 +24,14 @@
     <url-pattern>/FluegeBuchen</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>PersonRegristrieren</servlet-name>
+    <servlet-class>net.froihofer.dbs.fluege.PersonRegristrieren</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PersonRegristrieren</servlet-name>
+    <url-pattern>/PersonRegristrieren</url-pattern>
+  </servlet-mapping>
   <!-- Welcome files -->
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
