@@ -24,6 +24,15 @@
     <url-pattern>/FluegeBuchen</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>MeineFluege</servlet-name>
+    <servlet-class>net.froihofer.dbs.fluege.MeineFluege</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MeineFluege</servlet-name>
+    <url-pattern>/MeineFluege</url-pattern>
+  </servlet-mapping>
+  
   <!-- Welcome files -->
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
