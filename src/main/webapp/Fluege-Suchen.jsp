@@ -28,7 +28,8 @@
             <table>
                   <tr><td>Abflugplanet:</td><td><input name="abflugPlanet" type="text" value="${param.abflugPlanet}" required></td></tr>
                   <tr><td>Reiseziel:</td><td><input name="ankunftPlanet" type="text" value="${param.ankunftPlanet}" required></td></tr>
-                  <tr><td>Tag (JJJJ-MM-DD):</td><td><input name="tag" pattern=".{10}" type="text" value="${param.tag}" title="JJJJ-MM-DD" required></td></tr>   
+                  <tr><td>Abflugdatum:</td><td><input name="tag" type="date" value="${param.tag}" required></td></tr>   
+                
             </table>
                   <p></p>
                   <a href="${contextPath}/index.jsp" style="margin-left:120px">Zur Startseite </a>
@@ -52,7 +53,7 @@
               <table class="data table-striped">
                 <tr><th>Flugnummer</th><th>Abflugzeit</th><th>Ankunftszeit</th></tr>
                 <c:forEach var="flug" items="${flüge.rows}">
-                  <tr><td>${flug.flugnr}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td></tr>
+                  <tr><td>${flug.flugnr}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td><td><form action="${contextPath}/Fluege-Buchen.jsp" method="post"><button name="flugnr" value="${flug.flugnr}">Buchen</button></form></td></tr>
                 </c:forEach>
               </table>
             </c:if>
