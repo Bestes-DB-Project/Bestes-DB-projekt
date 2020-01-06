@@ -141,4 +141,18 @@ Create Table Raumschiffexemplar (
     CONSTRAINT Raumschiffexemplar_PK PRIMARY KEY (TypenNr,InvNr)
 );
 
-Insert into dbs_spacetravel.flug Values (1,'Earth','Earth',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+Insert into dbs_spacetravel.flug Values (1,'Erde','Erde',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+Insert into dbs_spacetravel.flug Values (2,'Erde','Mars',STR_TO_DATE('2020-01-07 12:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-08 13:33:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (3,'Mars','Jupiter',STR_TO_DATE('2020-01-08 12:20:10','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-08 22:15:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (4,'Neptun','Venus',STR_TO_DATE('2020-01-08 13:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-09 15:45:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (5,'Merkur','Mars',STR_TO_DATE('2020-01-08 12:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-09 23:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (6,'Neptun','Saturn',STR_TO_DATE('2020-01-09 14:30:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-10 09:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (7,'Saturn','Merkur',STR_TO_DATE('2020-01-10 12:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-10 23:30:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (8,'Venus','Uranus',STR_TO_DATE('2020-01-10 17:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-12 13:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (9,'Jupiter','Venus',STR_TO_DATE('2020-01-11 13:12:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-11 12:39:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (10,'Merkur','Neptun',STR_TO_DATE('2020-01-12 18:13:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 20:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (11,'Saturn','Uranus',STR_TO_DATE('2020-01-12 12:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 12:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (12,'Mars','Erde',STR_TO_DATE('2020-01-12 16:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 17:33:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (13,'Venus','Jupiter',STR_TO_DATE('2020-01-13 13:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 15:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (14,'Venus','Jupiter',STR_TO_DATE('2020-01-13 15:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 17:00:00','%Y-%m-%d %H:%i:%s'));
+Insert into dbs_spacetravel.flug Values (15,'Venus','Jupiter',STR_TO_DATE('2020-01-13 17:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 19:00:00','%Y-%m-%d %H:%i:%s'));
