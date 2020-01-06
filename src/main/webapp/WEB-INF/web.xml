@@ -32,14 +32,29 @@
     <servlet-name>PersonRegristrieren</servlet-name>
     <url-pattern>/PersonRegristrieren</url-pattern>
   </servlet-mapping>
+  
    <servlet>
     <servlet-name>MeineFluege</servlet-name>
-    <servlet-class>net.froihofer.dbs.fluege.MeineFluege</servlet-class>
+    <servlet-class>net.froihofer.dbs.fluege.meineFluege</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MeineFluege</servlet-name>
     <url-pattern>/MeineFluege</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>Anmelden</servlet-name>
+    <servlet-class>net.froihofer.dbs.fluege.Anmelden</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Anmelden</servlet-name>
+    <url-pattern>/Anmelden</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+  
+  
   
   <!-- Welcome files -->
   <welcome-file-list>
