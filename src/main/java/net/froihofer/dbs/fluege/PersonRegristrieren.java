@@ -80,8 +80,8 @@ public class PersonRegristrieren extends HttpServlet{
         req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
         return;
     }
-    if (svnrlength != 12) {
-        req.setAttribute(ERROR_MSG_PARAM,"Die Anzahl des Zeichens ist nicht gleich zwölf.");
+    if (svnrlength != 10) {
+        req.setAttribute(ERROR_MSG_PARAM,"Die Anzahl des Zeichens ist nicht gleich zehn.");
         req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
         return;
     }
