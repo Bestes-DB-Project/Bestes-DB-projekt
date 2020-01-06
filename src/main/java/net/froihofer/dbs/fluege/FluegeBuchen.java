@@ -6,12 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
-import java.sql.Types;
-import java.util.List;
 import javax.naming.InitialContext;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
@@ -20,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,75 +48,112 @@ public class FluegeBuchen extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     Connection con = null;
     Boolean createperson = false;
+    Boolean submit = false;
     PrintWriter pw = resp.getWriter();
     
-
-    Long SVNr = Long.parseLong(req.getParameter("SVNr"));
-    String vorname = req.getParameter("Vorname");
-    String nachname = req.getParameter("Nachname");
-    Person person = new Person(SVNr, vorname, nachname);
-
-    Passagier passagier = new Passagier(SVNr);
     
-    //Integer klasse = Integer.parseInt(req.getParameter("klasse"));
-    Integer klasse = 1;
-    Date Buchungsdatum = new Date(System.currentTimeMillis()); 
-    Integer FlugNr = 2;
-    //Integer FlugNr = Integer.parseInt(req.getParameter("FlugNr"));
-    Buchung buchung = new Buchung(klasse, Buchungsdatum, SVNr, FlugNr);
+    if(req.getParameter("Submit")!= null && req.getParameter("Userid")!= null)
+    {
+        submit = (req.getParameter("Submit").equals("1")) ? true : false;
+    }
     
-    
-    
-    try {
-        InitialContext ctx = new InitialContext();
-        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/FluegeDB");
-        con = ds.getConnection();
-        
-        Statement statement = con.createStatement();
-        //ps.setInt(1, SVNr);
-        ResultSet rs = statement.executeQuery("SELECT Vorname, Nachname FROM person WHERE SVNr =" + SVNr);
-        if(rs.next())
+    if(!submit)
+    {
+        int i = 2;
+        if(req.getParameter("Vorname")!= null)
         {
-            log.error("Version:" + rs.getString(1));
-            createperson = false;
+            String[] vorname = req.getParameterValues("Vorname");
+            for (String name : vorname) 
+            { 
+               log.error("Vorname = " + name);
+            }
         }
-        else
+        req.getRequestDispatcher("/Fluege-Buchen.jsp").forward(req, resp);
+    }
+    else
+    {
+        if(req.getParameter("SVNr")!= null && req.getParameter("Vorname")!= null && req.getParameter("Nachname")!= null && req.getParameter("Klasse")!= null && req.getParameter("FlugNr")!= null && req.getParameter("Userid")!= null )
         {
-            createperson = true;
-        }
-        
-        
-    }
-    catch (Exception e){
-        throw new PersistenceException("Fehler beim Suchen der Person: " + e.getMessage(), e);
-    }
-    finally {
-      try {
-        con.close();
-      }
-      catch (Exception e) {
-        log.debug("Fehler beim Schließen der Connection.", e);
-      }
-    }
+            String[] arrSVNr = req.getParameterValues("SVNr");
+            String[] arrVorname = req.getParameterValues("Vorname");
+            String[] arrNachname = req.getParameterValues("Nachname");
 
-    try {
-      if(createperson)
-      {
-        persistPerson(person);
-      }
-      persistPassagier(passagier);
-      persistBuchung(buchung);
-      
-      req.setAttribute(SUCCESS_MSG_PARAM, "Buchung wurde erfolgreich bearbeitet");      
+            Integer FlugNr = Integer.parseInt(req.getParameter("FlugNr"));
+            Integer klasse = Integer.parseInt(req.getParameter("Klasse"));
+            Long Userid = Long.parseLong(req.getParameter("Userid"));
+            Date Buchungsdatum = new Date(System.currentTimeMillis());
+
+            
+            if(arrSVNr.length ==  arrVorname.length && arrSVNr.length ==  arrNachname.length)
+            {   
+                for(int i = 0; i < arrVorname.length; i++)
+                {
+                    Long SVNr = Long.parseLong(arrSVNr[i]);
+                    String vorname = arrVorname[i];
+                    String nachname = arrNachname[i];;
+                    
+                    
+                    Person person = new Person(SVNr, vorname, nachname);            
+                    Passagier passagier = new Passagier(SVNr);
+                    Buchung buchung = new Buchung(klasse, Buchungsdatum, SVNr, Userid, FlugNr);
+                    
+                    try {
+                        InitialContext ctx = new InitialContext();
+                        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/FluegeDB");
+                        con = ds.getConnection();
+
+                        Statement statement = con.createStatement();
+                        //ps.setInt(1, SVNr);
+                        ResultSet rs = statement.executeQuery("SELECT Vorname, Nachname FROM person WHERE SVNr =" + SVNr);
+                        if(rs.next())
+                        {
+                            log.error("Version:" + rs.getString(1));
+                            createperson = false;
+                        }
+                        else
+                        {
+                            createperson = true;
+                        }
+
+
+                    }
+                    catch (Exception e){
+                        throw new PersistenceException("Fehler beim Suchen der Person: " + e.getMessage(), e);
+                    }
+                    finally {
+                      try {
+                        con.close();
+                      }
+                      catch (Exception e) {
+                        log.debug("Fehler beim Schließen der Connection.", e);
+                      }
+                    }
+
+                    try {
+                      if(createperson)
+                      {
+                        persistPerson(person);
+                      }
+                      persistPassagier(passagier);
+                      persistBuchung(buchung);
+
+                      req.setAttribute(SUCCESS_MSG_PARAM, "Buchung wurde erfolgreich bearbeitet");      
+                    }
+                    catch (Exception e) {
+                      log.error("Fehler beim bearbeiten der Buchung.",e);
+                      req.setAttribute(ERROR_MSG_PARAM, e.getMessage());
+                    }
+                    //req.setAttribute(WEINE, getWeineFromWeingut(wein.getErzeuger().getWeingut()));
+                    req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                }  
+            }
+        }
     }
-    catch (Exception e) {
-      log.error("Fehler beim bearbeiten der Buchung.",e);
-      req.setAttribute(ERROR_MSG_PARAM, e.getMessage());
-    }
-    //req.setAttribute(WEINE, getWeineFromWeingut(wein.getErzeuger().getWeingut()));
-    req.getRequestDispatcher("/Fluege-Buchen.jsp").forward(req, resp);
   }
   
+    
+    
+    
   private void persistPassagier(Passagier passagier) throws PersistenceException {
     Connection con = null;
     try {
@@ -189,12 +220,13 @@ public class FluegeBuchen extends HttpServlet {
     DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/FluegeDB");
 
     con = ds.getConnection();
-    String sqlStr = "INSERT INTO bucht (Klasse, Buchungsdatum, SVNr, FlugNr) VALUES (?, ?, ?, ?)";
+    String sqlStr = "INSERT INTO bucht (Klasse, Buchungsdatum, SVNr, UserSVNr, FlugNr) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement ps = con.prepareStatement(sqlStr);
       ps.setInt(1, buchung.getKlasse());
       ps.setDate(2, buchung.getBuchungsdatum());
       ps.setLong(3, buchung.getSVNr());
-      ps.setInt(4, buchung.getFlugNr());
+      ps.setLong(4, buchung.getSVNrAuftraggeber());
+      ps.setInt(5, buchung.getFlugNr());
       int count = ps.executeUpdate();
       if (count != 1) {
         throw new PersistenceException("Unbekannter Fehler beim Speichern der neuen Buchung (updateCount = 0).");
