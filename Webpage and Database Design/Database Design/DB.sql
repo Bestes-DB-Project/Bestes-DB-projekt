@@ -2,7 +2,7 @@ Create Database  dbs_spacetravel;
 Use dbs_spacetravel;
 
 Create Table Person (
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     Vorname varchar(30) NOT NULL,
     Nachname varchar(30) NOT NULL,
     PLZ INT,
@@ -13,7 +13,7 @@ Create Table Person (
 );
 
 Create Table TelNr (
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     TelNr INT NOT NULL,
     CONSTRAINT TelNr_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Person(SVNr),
     CONSTRAINT TelNr_PK PRIMARY KEY (TelNr,SVNr)
@@ -21,14 +21,14 @@ Create Table TelNr (
 
 Create Table Passagier (
     PasNr INT NOT NULL AUTO_INCREMENT,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     CONSTRAINT Passagier_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Person(SVNr),
     CONSTRAINT Passagier_PK PRIMARY KEY (PasNr)
 );
 
 Create Table Angestellte (
     AngNr INT NOT NULL,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     CONSTRAINT Angestellte_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Person(SVNr),
     CONSTRAINT Angestellte_PK PRIMARY KEY (AngNr,SVNr)
 );
@@ -44,7 +44,7 @@ Create Table Gehaltskonto (
     KontoNr INT NOT NULL,
     BLZ INT NOT NULL,
     Kontostand INT NOT NULL,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     CONSTRAINT Gehalstkonto_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Angestellte(SVNr),
     CONSTRAINT Gehalstkonto_BLZ_FK FOREIGN KEY (BLZ) REFERENCES Bank(BLZ),
     CONSTRAINT Angestellte_Unique UNIQUE (SVNr),
@@ -73,7 +73,7 @@ Create Table Flug_Wartet_Auf (
 Create Table Kapitaen (
     Kapitaenspatent INT NOT NULL,
     Lichtjahre INT,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     CONSTRAINT Kapitaen_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Angestellte(SVNr),
     CONSTRAINT Kapitaenspatent_Unique UNIQUE (Kapitaenspatent),
     CONSTRAINT Kapitaen_PK PRIMARY KEY (SVNr)
@@ -97,7 +97,7 @@ Create Table Raumschifftyp (
 
 Create Table Fliengen (
     FlugNr INT NOT NULL,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     TypenNr INT NOT NULL,
     CONSTRAINT Fliengen_FlugNr_FK FOREIGN KEY (FlugNr) REFERENCES Flug(FlugNr),
     CONSTRAINT Fliengen_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Kapitaen(SVNr),
@@ -109,9 +109,11 @@ Create Table Bucht (
     BuchungsNr INT NOT NULL AUTO_INCREMENT,
     Klasse INT,
     Buchungsdatum DATE,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
+    UserSVNr BIGINT NOT NULL,
     FlugNr INT NOT NULL,
     CONSTRAINT Bucht_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Passagier(SVNr),
+    CONSTRAINT Bucht_UserSVNr_FK FOREIGN KEY (UserSVNr) REFERENCES Passagier(SVNr),
     CONSTRAINT Bucht_FlugNr_FK FOREIGN KEY (FlugNr) REFERENCES Flug(FlugNr),
     CONSTRAINT Bucht_Unique UNIQUE (BuchungsNr),
     CONSTRAINT Bucht_PK PRIMARY KEY (SVNr,FlugNr)
@@ -120,7 +122,7 @@ Create Table Bucht (
 Create Table Techniker (
     LizenzNr INT NOT NULL,
     Ausbildungsgrad varchar(30),
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     TypenNr INT NOT NULL,
     CONSTRAINT Techniker_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Angestellte(SVNr),
     CONSTRAINT Techniker_TypenNr_FK FOREIGN KEY (TypenNr) REFERENCES Raumschifftyp(TypenNr),
@@ -134,7 +136,7 @@ Create Table Raumschiffexemplar (
     Fertigungsjahr INT,
     TypenNr INT NOT NULL,
     Code INT NOT NULL,
-    SVNr INT NOT NULL,
+    SVNr BIGINT NOT NULL,
     CONSTRAINT Raumschiffexemplar_TypenNr_FK FOREIGN KEY (TypenNr) REFERENCES Raumschifftyp(TypenNr),
     CONSTRAINT Raumschiffexemplar_SVNr_FK FOREIGN KEY (SVNr) REFERENCES Angestellte(SVNr),
     CONSTRAINT Raumschiffexemplar_Unique UNIQUE (Code),
@@ -156,3 +158,6 @@ Insert into dbs_spacetravel.flug Values (12,'Mars','Erde',STR_TO_DATE('2020-01-1
 Insert into dbs_spacetravel.flug Values (13,'Venus','Jupiter',STR_TO_DATE('2020-01-13 13:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 15:00:00','%Y-%m-%d %H:%i:%s'));
 Insert into dbs_spacetravel.flug Values (14,'Venus','Jupiter',STR_TO_DATE('2020-01-13 15:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 17:00:00','%Y-%m-%d %H:%i:%s'));
 Insert into dbs_spacetravel.flug Values (15,'Venus','Jupiter',STR_TO_DATE('2020-01-13 17:00:00','%Y-%m-%d %H:%i:%s'),STR_TO_DATE('2020-01-14 19:00:00','%Y-%m-%d %H:%i:%s'));
+
+
+Insert into dbs_spacetravel.person (SVNr,Vorname,Nachname) Values (2788160497,'Christopher','Skallak');

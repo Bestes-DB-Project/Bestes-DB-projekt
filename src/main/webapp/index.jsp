@@ -12,13 +12,16 @@
         <title>Futurama</title>
     </head>
     <body>
-
+        <c:set var="Userid" value="1" scope = "session"/>
+        
         <div class="Headline">
             <h3>Raumschiffgesellschafts Portal Futurama</h3>
         </div>
 
         <div class="Main">        
-                
+        
+            
+            
             <h4>In Progress: Raumschiffgesellschafts Portal</h4>
             <ul>
                 <li><a href="index.jsp">Anmelden</a></li>
