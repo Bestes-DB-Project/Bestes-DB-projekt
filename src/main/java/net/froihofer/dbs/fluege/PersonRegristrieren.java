@@ -100,11 +100,12 @@ public class PersonRegristrieren extends HttpServlet{
         req.setAttribute(SUCCESS_MSG_PARAM, "Person \""+person.getVorname()+"\" wurde erfolgreich gespeichert.");
         Cookie cookie = new Cookie("SVNR", svnr.toString());
         resp.addCookie(cookie);
+        req.getRequestDispatcher("/meineFluege.jsp").forward(req, resp);
     } catch(Exception e){
        log.error("Fehler beim Regristrieren.",e);
        req.setAttribute(ERROR_MSG_PARAM, e.getMessage());
+       req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
     }
-    req.getRequestDispatcher("/meineFluege.jsp").forward(req, resp);
   }
   private void createPassagier(Person person) throws PersistenceException {
     
