@@ -20,7 +20,7 @@
             <body>
 
                  <div class="Headline">
-                        <h3>Meine Flüge</h3>
+                        <h3>Meine Buchungen</h3>
                 </div>
 
                 <div class="Main"> 
@@ -38,22 +38,21 @@
                                     break;
                                   }
                             }
-                        String svnr = "123";  //RAUSLÖSCHEN SOBALD ANMELDUNG MIT COOKIES
-                        request.setAttribute("svnr", svnr); //RAUSLÖSCHEN SOBALD ANMELDUNG MIT COOKIES
                         } %>
-                       
+                        <c:if test="${empty svnr}">
+                             <c:redirect url = "${contextPath}/../index.jsp"/>
+                        </c:if>
                         <sql:setDataSource dataSource="jdbc/FluegeDB" />
                         <%-- <sql:query var="flug" sql="SELECT * FROM Flug" />  --%> 
-                        <sql:query var="flug" sql="SELECT * FROM Flug WHERE FlugNr IN (SELECT FlugNr FROM BUCHT WHERE SVNr = ?)"> 
+                        <sql:query var="flug" sql="SELECT * FROM Flug WHERE FlugNr IN (SELECT FlugNr FROM BUCHT WHERE UserSVNr = ?)"> 
                             <sql:param value="${svnr}" />
                         </sql:query>
                         
-                        <a href="${contextPath}/index.jsp">Zur Startseite</a> <a href="Fluege-Suchen.jsp">Flüge suchen</a>
+                        <a href="Fluege-Suchen.jsp">Flüge suchen</a>
                          
                         <form method="GET" action="" >
                             Abflugplanet: <select name="abflugplanet" value="${param.abflugplanet}">
                                     <option value=""></option>
-                                    <option value="Earth">Earth</option> <%--RAUSLÖSCHEN--%>
                                     <option value="Erde">Erde</option>
                                     <option value="Jupiter">Jupiter</option>
                                     <option value="Mars">Mars</option>
@@ -65,7 +64,6 @@
                             </select>
                             Zielplanet: <select name="zielplanet" value="${param.zielplanet}">
                                     <option value=""></option>
-                                    <option value="Earth">Earth</option> <%--RAUSLÖSCHEN--%>
                                     <option value="Erde">Erde</option>
                                     <option value="Jupiter">Jupiter</option>
                                     <option value="Mars">Mars</option>

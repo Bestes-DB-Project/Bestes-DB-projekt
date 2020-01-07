@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,13 +58,9 @@ public class PersonRegristrieren extends HttpServlet{
     String hausnummer = req.getParameter("hausnummer");
     String ort = req.getParameter("ort");
     String strasse = req.getParameter("strasse");
+    String passwort = req.getParameter("passwort");
     PrintWriter pw = resp.getWriter();
-    List<String> telefonnummern = new ArrayList<String>();
-    telefonnummern.add(req.getParameter("telefonnummer1"));
-    telefonnummern.add(req.getParameter("telefonnummer2"));
-    telefonnummern.add(req.getParameter("telefonnummer3"));
-    telefonnummern.add(req.getParameter("telefonnummer4"));
-    telefonnummern.add(req.getParameter("telefonnummer5"));
+    String[] telefonnummern = req.getParameterValues("telefonnummer");
     int svnrlength = nummer.length();
     
     if (StringUtils.isBlank(name)) {
@@ -90,41 +88,41 @@ public class PersonRegristrieren extends HttpServlet{
         req.setAttribute(ERROR_MSG_PARAM,"Zahl ist länger als neun Zeichen.");
         req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
         return;
-    }
-    if(!telefonnummern.isEmpty()){
-        for(String n:telefonnummern){
-            if (n.length() > 9){
-            req.setAttribute(ERROR_MSG_PARAM,"Einer der Telefonnummern hat mehr als neun Zeichen.");
-            req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
-            return;
-            }
-        }
-    }  
+    } 
     Long svnr = Long.valueOf(nummer);
     Integer plz;
     if(NumberUtils.isNumber(plznummer)) plz = Integer.valueOf(plznummer);
     else plz = null;
-    Person person = new Person(svnr, name, name2, plz, ort, strasse, hausnummer);
+    Person person = new Person(svnr, name, name2, plz, ort, strasse, hausnummer, passwort);
     try{
         createPassagier(person);
-        if(!telefonnummern.isEmpty()) createTelefonnummer(person, telefonnummern);
+        createTelefonnummer(person, telefonnummern);
         req.setAttribute(SUCCESS_MSG_PARAM, "Person \""+person.getVorname()+"\" wurde erfolgreich gespeichert.");
+        Cookie cookie = new Cookie("SVNR", svnr.toString());
+        resp.addCookie(cookie);
     } catch(Exception e){
        log.error("Fehler beim Regristrieren.",e);
        req.setAttribute(ERROR_MSG_PARAM, e.getMessage());
     }
-    req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
+    req.getRequestDispatcher("/meineFluege.jsp").forward(req, resp);
   }
   private void createPassagier(Person person) throws PersistenceException {
-      Passagier passagier = new Passagier(person.getSVNr());
+    
       Connection con = null;
-      try{
+      try {
         InitialContext ctx = new InitialContext();
         DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/FluegeDB");
         con = ds.getConnection();
+        String Query= "select * from person where svnr=?";
+        PreparedStatement psm=con.prepareStatement(Query);
+        psm.setString(1, person.getSVNr().toString());
+        ResultSet rs = psm.executeQuery();
+        if(rs.next()){
+           throw new PersistenceException("SVNr bereits in Verwendung");
+        }
         
-        String sqlStr = "INSERT INTO Person (SVNr, Vorname, Nachname, PLZ, Ort, Straße, HausNr) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlStr = "INSERT INTO Person (SVNr, Vorname, Nachname, PLZ, Ort, Straße, HausNr, Passwort) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sqlStr);
         ps.setLong(1, person.getSVNr());
         ps.setString(2, person.getVorname());
@@ -149,14 +147,15 @@ public class PersonRegristrieren extends HttpServlet{
         } else {
             ps.setNull(7, Types.VARCHAR);
         }
+         ps.setString(8, person.getPasswort());
         
         int count = ps.executeUpdate();
         if (count != 1) {
             throw new PersistenceException("Unbekannter Fehler beim Speichern des neuen Persons (updateCount = 0).");
         }
-        
+ //       
         //Passagierupdate
-        sqlStr = "INSERT INTO Passagier (SVNr) " + "VALUES (?)";
+/*        sqlStr = "INSERT INTO Passagier (SVNr) " + "VALUES (?)";
         ps = con.prepareStatement(sqlStr);
         //ps.setInt(1, passagier.getPasNr());
         ps.setLong(1, passagier.getSVNr());
@@ -164,7 +163,7 @@ public class PersonRegristrieren extends HttpServlet{
         if (count != 1) {
             throw new PersistenceException("Unbekannter Fehler beim Speichern des Persons als Passagier (updateCount = 0).");
         }
-        
+       */ 
       } catch (Exception e) {
       throw new PersistenceException("Fehler beim Regristrieren: " + e.getMessage(), e);
     }
@@ -178,7 +177,7 @@ public class PersonRegristrieren extends HttpServlet{
     }
   }
   
-  private void createTelefonnummer(Person person, List<String> nummern){
+  private void createTelefonnummer(Person person, String[] nummern){
       Connection con = null;
       try{
           InitialContext ctx = new InitialContext();
@@ -190,7 +189,7 @@ public class PersonRegristrieren extends HttpServlet{
                     + "VALUES (?, ?)";
                 PreparedStatement ps = con.prepareStatement(sqlStr);
                 ps.setLong(1, person.getSVNr());
-                ps.setInt(2, Integer.parseInt(n));
+                ps.setLong(2, Long.parseLong(n));
                 int count = ps.executeUpdate();
                 if (count != 1) {
                     throw new PersistenceException("Unbekannter Fehler beim Speichern der Telefonnummer (updateCount = 0).");

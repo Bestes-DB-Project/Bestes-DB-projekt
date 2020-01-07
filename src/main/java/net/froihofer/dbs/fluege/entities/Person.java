@@ -21,12 +21,13 @@ public class Person implements Serializable {
     private String ort;
     private String straße;
     private String hausNr;
+    private String passwort;
 
     //No arguments constructor required for entity class
     public Person() {
     }
 
-    public Person(Long SVNr, String vorname, String nachname, Integer PLZ, String ort, String straße, String hausNr) {
+    public Person(Long SVNr, String vorname, String nachname, Integer PLZ, String ort, String straße, String hausNr, String passwort) {
         this.SVNr = SVNr;
         this.vorname = vorname;
         this.nachname = nachname;
@@ -34,6 +35,7 @@ public class Person implements Serializable {
         this.ort = ort;
         this.straße = straße;
         this.hausNr = hausNr;
+        this.passwort = passwort;
     }
 
     public Person(Long SVNr, String vorname, String nachname) {
@@ -96,5 +98,13 @@ public class Person implements Serializable {
 
     public void setHausNr(String hausNr) {
         this.hausNr = hausNr;
+    }
+    
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public void setPasswort (String passwort) {
+        this.passwort = passwort;
     }
 }

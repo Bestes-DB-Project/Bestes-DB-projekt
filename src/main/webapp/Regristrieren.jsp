@@ -13,35 +13,50 @@
     <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="${contextPath}/css/main.css" />
-    <title>Passagier anmelden</title>
+    <title>Futurama</title>
   </head>
   <body>
       <div class="Headline">
-            <h3>Raumschiffgesellschafts Portal Futurama</h3>
+            <h3>Neue Person</h3>
         </div>
       
       <div class="Main">
-          <h1>Neuer Passagier</h1>
     <% if (request.getAttribute(PersonRegristrieren.ERROR_MSG_PARAM) != null) { %>
             <p style="color: red"><%=request.getAttribute(PersonRegristrieren.ERROR_MSG_PARAM)%></p>
         <% } %>
         <% if (request.getAttribute(PersonRegristrieren.SUCCESS_MSG_PARAM) != null) { %>
             <p style="color: blue"><%=request.getAttribute(PersonRegristrieren.SUCCESS_MSG_PARAM)%></p>
         <% } %>
+        
+    <c:set var="Amount" value="${param.Amount}" scope = "page"/>
+    <c:if test="${empty Amount}">
+        <c:set var="Amount" value="0" scope = "page" />
+    </c:if>
+        
     <form method="POST" action="${contextPath}/PersonRegristrieren" style="display: inline-block">
       <table>
-        <tr><td>SVNr:</td><td><input type="integer" name="svnr" value="${param.svnr}"/></td></tr>
-        <tr><td>Vorname:</td><td><input type="text" name="vorname" value="${param.fvorname}"/></td></tr>
-        <tr><td>Nachname:</td><td><input type="text" name="nachname" value="${param.nachname}"/></td></tr>
-        <tr><td>PLZ:</td><td><input type="integer" name="plz" value="${param.plz}"/></td></tr>
-        <tr><td>Ort:</td><td><input type="text" name="ort" value="${param.ort}"/></td></tr>
-        <tr><td>Straße:</td><td><input type="text" name="strasse" value="${param.strasse}"/></td></tr>
-        <tr><td>Hausnummer:</td><td><input type="text" name="hausnummer" value="${param.hausnummer}"/></td></tr>
-        <tr><td>Telefonnummer1:</td><td><input type="integer" name="telefonnummer1" value="${param.telefonnummer1}"/></td></tr>
-        <tr><td>Telefonnummer2:</td><td><input type="integer" name="telefonnummer2" value="${param.telefonnummer2}"/></td></tr>
-        <tr><td>Telefonnummer3:</td><td><input type="integer" name="telefonnummer3" value="${param.telefonnummer3}"/></td></tr>
-        <tr><td>Telefonnummer4:</td><td><input type="integer" name="telefonnummer4" value="${param.telefonnummer4}"/></td></tr>
-        <tr><td>Telefonnummer5:</td><td><input type="integer" name="telefonnummer5" value="${param.telefonnummer5}"/></td></tr>
+        <tr><td>SVNr:</td><td><input type="number" min="1000000000" max ="9999999999" name="svnr" value="${param.svnr}" style="width:200px"  required/></td></tr>
+        <tr><td>Vorname:</td><td><input type="text" name="vorname" value="${param.vorname}" style="width:200px" required/></td></tr>
+        <tr><td>Nachname:</td><td><input type="text" name="nachname" value="${param.nachname}" style="width:200px"  required/></td></tr>
+        <tr><td>PLZ:</td><td><input type="number" min="1000" max ="99999" name="plz" value="${param.plz}" style="width:200px" required/></td></tr>
+        <tr><td>Ort:</td><td><input type="text" name="ort" value="${param.ort}" style="width:200px" required/></td></tr>
+        <tr><td>Straße:</td><td><input type="text" name="strasse" value="${param.strasse}" style="width:200px" required/></td></tr>
+        <tr><td>Hausnummer:</td><td><input type="text" name="hausnummer" value="${param.hausnummer}" style="width:200px" required/></td></tr>
+        <tr><td>Passwort:</td><td><input type="password" name="passwort" value="${param.passwort}" style="width:200px" required/></td></tr>
+        <tr><td>
+            Telefonnummer:</td><td><input type="number"  name="telefonnummer" value="${param.telefonnummer}" style="width:200px"  required/>
+            <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount+1}"> + </button>
+            <c:if test="${Amount > 0}">
+                <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount-1}"> - </button>
+            </c:if> 
+            
+        </td></tr>
+
+        
+        <c:forEach var="i" begin="1" end="${Amount}" >
+             <tr><td>Telefonnummer:</td><td><input type="number" name="telefonnummer" value="${param.telefonnummer}" style="width:200px" required/></td></tr>       
+        </c:forEach>
+        
         <%--<tr><td style="padding-top: 5px">JPA verwenden?</td><td style="padding-top: 5px"><input type="checkbox" name="useJpa" <%= request.getParameter("useJpa") != null ? "checked=\"true\"" : ""%>/></td></tr>
       --%>
       </table>

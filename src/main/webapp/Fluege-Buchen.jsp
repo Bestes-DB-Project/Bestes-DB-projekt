@@ -33,11 +33,24 @@
                 <c:set var="Amount" value="1" scope = "page" />
             </c:if>
 
-            <!-- Check if flug is choosen --> 
-            <c:set var="Flugnr" value="${param.flugnr}" scope = "page"/>
-            <c:if test="${empty Flugnr}">
-                <!-- c:redirect url = "${contextPath}/../index.jsp"/> -->
-            </c:if>            
+           <% Cookie cookie = null;
+                        Cookie[] cookies = null;
+                        
+                        cookies = request.getCookies();
+
+                        if( cookies != null ) {
+                           for (int i = 0; i < cookies.length; i++) {
+                              cookie = cookies[i];
+                              if (cookie.getName().equals("SVNR")) {
+                                    String svnr = cookie.getValue();
+                                    request.setAttribute("svnr", svnr);
+                                    break;
+                                  }
+                            }
+                        } %>
+        <c:if test="${empty svnr}">
+                <c:redirect url = "${contextPath}/../index.jsp"/>
+        </c:if>          
             
             
             
@@ -49,18 +62,18 @@
                     </c:if>  
                 </p>
                 
-                <input type="hidden" name="Userid" value="2788160497"/>
-                <input type="hidden" name="FlugNr" value="1"/> <!-- Change -->
+                <input type="hidden" name="Userid" value="${svnr}"/>
+                <input type="hidden" name="FlugNr" value="${param.flugnr}"/>
                 <input type="hidden" name="Klasse" value="1"/> <!-- Change -->
                 
                 <c:forEach var="i" begin="0" end="${Amount-1}" >
                     <div class="BuchenForm">
-                        <p>Vorname:  &emsp;&emsp;                       <input name="Vorname" type="text" value="${param.Vorname}" placeholder="Vornname" style="width:200px"/></p>
-                        <p>Nachname: &emsp;&nbsp;                       <input name="Nachname" type="text" value="${param.Nachname}" placeholder="Nachname" style="width:200px"/></p>
-                        <p>SVNR:     &emsp;&emsp;&emsp;&nbsp;&nbsp;     <input name="SVNr" type="number" value="${param.SVNR}" placeholder="SVNR" min="1000000000" max="9999999999" style="width:200px"/></p>
+                        <p>Vorname:  &emsp;&emsp;                       <input name="Vorname" type="text" value="${param.Vorname}" placeholder="Vornname" style="width:200px"  required/></p>
+                        <p>Nachname: &emsp;&nbsp;                       <input name="Nachname" type="text" value="${param.Nachname}" placeholder="Nachname" style="width:200px"  required/></p>
+                        <p>SVNR:     &emsp;&emsp;&emsp;&nbsp;&nbsp;     <input name="SVNr" type="number" value="${param.SVNR}" placeholder="SVNR" min="1000000000" max="9999999999" style="width:200px"  required/></p>
                     </div>
                 </c:forEach>
-                <button class="btn btn-primary" formmethod="post" name="Submit" value="1">Submit</button>  
+                <button class="btn btn-primary" formmethod="post" name="Submit" value="1">Buchen</button>  
                 <input type="hidden" name="Amount" value="${Amount}">
             </form>
         </div>

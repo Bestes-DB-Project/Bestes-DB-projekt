@@ -24,10 +24,51 @@
     </div>
       
     <div class="Main">
+        <% Cookie cookie = null;
+                        Cookie[] cookies = null;
+                        
+                        cookies = request.getCookies();
+
+                        if( cookies != null ) {
+                           for (int i = 0; i < cookies.length; i++) {
+                              cookie = cookies[i];
+                              if (cookie.getName().equals("SVNR")) {
+                                    String svnr = cookie.getValue();
+                                    request.setAttribute("svnr", svnr);
+                                    break;
+                                  }
+                            }
+                        } %>
+        <c:if test="${empty svnr}">
+                <c:redirect url = "${contextPath}/../index.jsp"/>
+        </c:if>
         <form method="GET" action="">
             <table>
-                  <tr><td>Abflugplanet:</td><td><input name="abflugPlanet" type="text" value="${param.abflugPlanet}" required></td></tr>
-                  <tr><td>Reiseziel:</td><td><input name="ankunftPlanet" type="text" value="${param.ankunftPlanet}" required></td></tr>
+                   
+                  <tr><td>Abflugplanet:</td><td>
+                       <select name="abflugPlanet" value="${param.abflugPlanet}" required>
+                                    <option value=""></option>
+                                    <option value="Erde">Erde</option>
+                                    <option value="Jupiter">Jupiter</option>
+                                    <option value="Mars">Mars</option>
+                                    <option value="Merkur">Merkur</option>
+                                    <option value="Neptun">Neptun</option>
+                                    <option value="Saturn">Saturn</option>
+                                    <option value="Uranus">Uranus</option>
+                                    <option value="Venus">Venus</option>
+                            </select> </td></tr>
+                  <tr><td>Reiseziel:</td><td>
+                          <select name="ankunftPlanet" value="${param.ankunftPlanet}" required>
+                                    <option value=""></option>
+                                    <option value="Erde">Erde</option>
+                                    <option value="Jupiter">Jupiter</option>
+                                    <option value="Mars">Mars</option>
+                                    <option value="Merkur">Merkur</option>
+                                    <option value="Neptun">Neptun</option>
+                                    <option value="Saturn">Saturn</option>
+                                    <option value="Uranus">Uranus</option>
+                                    <option value="Venus">Venus</option>
+                            </select> </td></tr>
                   <tr><td>Abflugdatum:</td><td><input name="tag" type="date" value="${param.tag}" required></td></tr>   
                 
             </table>
@@ -40,7 +81,7 @@
             <sql:setDataSource dataSource="jdbc/FluegeDB" />
 
             <c:if test="${not empty param.abflugPlanet and not empty param.ankunftPlanet and not empty param.tag}">
-              <sql:query var="flüge" sql="SELECT FlugNr, Abflugzeit, Ankuftszeit FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND abflugzeit like ?">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND abflugzeit like ?">
                 <sql:param value="%${param.abflugPlanet}%" />
                  <sql:param value="%${param.ankunftPlanet}%"/>
                  <sql:param value="${param.tag}%"/>
@@ -51,9 +92,9 @@
             </c:if>
             <c:if test="${flüge.rowCount > 0}">
               <table class="data table-striped">
-                <tr><th>Flugnummer</th><th>Abflugzeit</th><th>Ankunftszeit</th></tr>
+                <tr><th>Flugnummer</th><th>Abflugplanet</th><th>Zielplanet</th><th>Abflugzeit</th><th>Ankunftszeit</th></tr>
                 <c:forEach var="flug" items="${flüge.rows}">
-                  <tr><td>${flug.flugnr}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td><td><form action="${contextPath}/Fluege-Buchen.jsp" method="post"><button name="flugnr" value="${flug.flugnr}">Buchen</button></form></td></tr>
+                  <tr><td>${flug.flugnr}</td><td>${flug.abflugplanet}</td><td>${flug.zielplanet}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td><td><form action="${contextPath}/Fluege-Buchen.jsp" method="post"><button name="flugnr" value="${flug.flugnr}">Buchen</button></form></td></tr>
                 </c:forEach>
               </table>
             </c:if>
