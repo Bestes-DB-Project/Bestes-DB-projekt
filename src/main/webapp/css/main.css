@@ -4,8 +4,8 @@ table.data {
   border: 1px solid grey;
   empty-cells: show;
   border-collapse: collapse;
-  margin-left:auto; 
-  margin-right:auto;
+  /* margin-left:auto; 
+  margin-right:auto; */
 }
 
 table.data th {

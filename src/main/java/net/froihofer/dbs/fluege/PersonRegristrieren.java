@@ -11,8 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 import javax.naming.InitialContext;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -23,9 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
-import net.froihofer.dbs.fluege.entities.Passagier;
 import net.froihofer.dbs.fluege.entities.Person;
-import static net.froihofer.dbs.weine.NeuerWein.ERROR_MSG_PARAM;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
@@ -154,17 +150,7 @@ public class PersonRegristrieren extends HttpServlet{
         if (count != 1) {
             throw new PersistenceException("Unbekannter Fehler beim Speichern des neuen Persons (updateCount = 0).");
         }
- //       
-        //Passagierupdate
-/*        sqlStr = "INSERT INTO Passagier (SVNr) " + "VALUES (?)";
-        ps = con.prepareStatement(sqlStr);
-        //ps.setInt(1, passagier.getPasNr());
-        ps.setLong(1, passagier.getSVNr());
-        count = ps.executeUpdate();
-        if (count != 1) {
-            throw new PersistenceException("Unbekannter Fehler beim Speichern des Persons als Passagier (updateCount = 0).");
-        }
-       */ 
+
       } catch (Exception e) {
       throw new PersistenceException("Fehler beim Regristrieren: " + e.getMessage(), e);
     }

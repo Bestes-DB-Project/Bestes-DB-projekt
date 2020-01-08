@@ -68,7 +68,7 @@
                         <p></p> 
                         <h5>Zum Filtern der letzten Buchungen: </h5> <p></p> 
                  
-                        <form method="GET" action="" >
+                        <form method="GET" action="${contextPath}/meineFluege.jsp" >
                             Abflugplanet: <select name="abflugplanet" value="${param.abflugplanet}">
                                     <option value=""></option>
                                     <option value="Erde">Erde</option>

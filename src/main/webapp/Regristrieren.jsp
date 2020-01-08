@@ -45,9 +45,9 @@
         <tr><td>Passwort:</td><td><input type="password" name="passwort" value="${param.passwort}" style="width:200px" required/></td></tr>
         <tr><td>
             Telefonnummer:</td><td><input type="number"  name="telefonnummer" value="${param.telefonnummer}" style="width:200px"  required/>
-            <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount+1}"> + </button>
+            <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount+1}" formnovalidate> + </button>
             <c:if test="${Amount > 0}">
-                <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount-1}"> - </button>
+                <button class="btn btn-primary" formmethod="post" formaction="${contextPath}/Regristrieren.jsp" name="Amount" value="${Amount-1}" formnovalidate> - </button>
             </c:if> 
             
         </td></tr>
