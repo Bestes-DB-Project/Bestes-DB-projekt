@@ -79,13 +79,13 @@ public class PersonRegristrieren extends HttpServlet{
         return;
     }
     if (svnrlength != 10) {
-        req.setAttribute(ERROR_MSG_PARAM,"Die Anzahl des Zeichens ist nicht gleich zehn.");
+        req.setAttribute(ERROR_MSG_PARAM,"Die SVNr muss zehn Zeichen lang sein.");
         req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
         return;
     }
     
     if (StringUtils.isNotBlank(plznummer) && plznummer.length() > 9){
-        req.setAttribute(ERROR_MSG_PARAM,"Zahl ist länger als neun Zeichen.");
+        req.setAttribute(ERROR_MSG_PARAM,"PLZ ist länger als neun Zeichen.");
         req.getRequestDispatcher("/Regristrieren.jsp").forward(req, resp);
         return;
     } 

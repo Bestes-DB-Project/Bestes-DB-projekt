@@ -42,14 +42,32 @@
                         <c:if test="${empty svnr}">
                              <c:redirect url = "${contextPath}/../index.jsp"/>
                         </c:if>
-                        <sql:setDataSource dataSource="jdbc/FluegeDB" />
-                        <%-- <sql:query var="flug" sql="SELECT * FROM Flug" />  --%> 
+                        <sql:setDataSource dataSource="jdbc/FluegeDB" />                 
                         <sql:query var="flug" sql="SELECT * FROM Flug WHERE FlugNr IN (SELECT FlugNr FROM BUCHT WHERE UserSVNr = ?)"> 
                             <sql:param value="${svnr}" />
                         </sql:query>
                         
-                        <a href="Fluege-Suchen.jsp">Flüge suchen</a>
-                         
+                        <sql:query var="person" sql="SELECT * FROM Person WHERE SVNr = ?"> 
+                            <sql:param value="${svnr}" />
+                        </sql:query>
+                        
+                       <c:if test="${person.rowCount > 0}">
+                                <c:forEach var="person" items="${person.rows}"> 
+                                    <h3> Hallo   <tr><td>${person.Vorname} </td><td>${person.Nachname}</td></tr>!  </h3>
+                                </c:forEach> 
+                        </c:if>
+                        <p></p>
+                       <p>
+                        <div style="display: flex;">
+                            <form name="logout" action="${contextPath}/index.jsp" onClick="deleteCookies()" method="post"><button>Logout</button></form> 
+                            <form name="fluegeSuchen" action="${contextPath}/Fluege-Suchen.jsp" method="post" style="margin-left:10px"><button>Flüge suchen</button></form>
+                            
+                            
+                        </div>                               
+                        </p>
+                        <p></p> 
+                        <h5>Zum Filtern der letzten Buchungen: </h5> <p></p> 
+                 
                         <form method="GET" action="" >
                             Abflugplanet: <select name="abflugplanet" value="${param.abflugplanet}">
                                     <option value=""></option>

@@ -3,13 +3,29 @@
     Created on : 03.01.2020, 15:26:08
     Author     : JayJay
 --%>
+<% Cookie cookie = null;
+                        Cookie[] cookies = null;
+                        
+                        cookies = request.getCookies();
 
+                        if( cookies != null ) {
+                           for (int i = 0; i < cookies.length; i++) {
+                              cookie = cookies[i];
+                              if (cookie.getName().equals("SVNR")) {
+                                cookie.setValue("");                              
+                                cookie.setMaxAge(0);
+                                response.addCookie(cookie);
+                              }
+                            }
+                        } %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="net.froihofer.dbs.fluege.Anmelden" %>
                 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
                 "http://www.w3.org/TR/html4/loose.dtd">
                 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+                
+                
                 <html>
                     <head>
                         <c:set var="contextPath" value="/dbs-fluege"/>
@@ -26,6 +42,9 @@
                         </div>
 
                         <div class="Main">
+                     
+                            
+                            
                                 <% if (request.getAttribute(Anmelden.ERROR_MSG_PARAM) != null) { %>
                                      <p style="color: red"><%=request.getAttribute(Anmelden.ERROR_MSG_PARAM)%></p>
                                 <% } %>
@@ -36,7 +55,7 @@
                   <tr><td>Passwort:</td><td><input name="passwort" placeholder="Passwort" type="password" value="${param.passwort}" required></td></tr>   
             </table>
                   <p></p>
-                  <a href="${contextPath}/Regristrieren.jsp" style="margin-left:120px">Registrieren </a>
+                  <a href="${contextPath}/Regristrieren.jsp">Registrieren </a>
                   <button class="btn btn-primary" style="margin-left: 10px">Anmelden</button> 
         </form>        
                         </div>

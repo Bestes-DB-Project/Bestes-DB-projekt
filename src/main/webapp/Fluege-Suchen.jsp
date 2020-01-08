@@ -73,7 +73,7 @@
                 
             </table>
                   <p></p>
-                  <a href="${contextPath}/index.jsp" style="margin-left:120px">Zur Startseite </a>
+                  <a href="${contextPath}/meineFluege.jsp" >meine Buchungen </a>
                   <button class="btn btn-primary" style="margin-left: 10px">Suchen</button> 
         </form>
 
