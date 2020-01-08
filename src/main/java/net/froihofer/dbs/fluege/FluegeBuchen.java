@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 
 import javax.naming.InitialContext;
 import javax.persistence.EntityManagerFactory;
@@ -20,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static net.froihofer.dbs.fluege.FluegeBuchen.ERROR_MSG_PARAM;
-import static net.froihofer.dbs.fluege.FluegeBuchen.SUCCESS_MSG_PARAM;
 import net.froihofer.dbs.fluege.entities.Buchung;
 import net.froihofer.dbs.fluege.entities.Person;
 import net.froihofer.dbs.fluege.entities.Passagier;
@@ -125,7 +123,7 @@ public class FluegeBuchen extends HttpServlet {
                             if(!rs.getString("Vorname").equals(person.getVorname()) && !rs.getString("Nachname").equals(person.getNachname()))
                             {
                                 log.error("Person sitmmt nicht mit der Person indatenban überein:" + rs.getString("Vorname"));
-                                WarningMSG = WarningMSG + "Die Datent der" + person.getVorname() +" " + person.getNachname() + "stimmt nicht mit der Person aus der Datenbank mit selbiger SVNr überein: <br> Die Buchung wurde für die in der Datenbank angelegten Person gebucht <br>";
+                                WarningMSG = WarningMSG + "Die Daten der Person " + person.getVorname() +" " + person.getNachname() + " stimmen nicht mit den Daten aus der Datenbank mit selbiger SVNr überein. <br> Die Buchung wurde für die in der Datenbank angelegten Person gebucht. <br>";
                                 person.setVorname(rs.getString("Vorname"));
                                 person.setNachname(rs.getString("Nachname"));
                             }
@@ -158,7 +156,7 @@ public class FluegeBuchen extends HttpServlet {
                         if(rs.next())
                         {
                             log.error("Person hat diesen Flug schon gebucht" + person.getVorname());
-                            ErrorMSG = ErrorMSG + "Person hat diesen Flug schon gebucht:" + person.getVorname() +" " + person.getNachname() + "<br>";
+                            ErrorMSG = ErrorMSG + "Person hat diesen Flug schon gebucht: " + person.getVorname() +" " + person.getNachname() + "<br>";
                             abort = true;
                         }
                     }
@@ -184,10 +182,11 @@ public class FluegeBuchen extends HttpServlet {
                       log.error("Fehler beim bearbeiten der Buchung für Person " + person.getVorname(),e);
                       req.setAttribute(ERROR_MSG_PARAM, e.getMessage());
                     }
-                    if(!ErrorMSG.equals("")){req.setAttribute(ERROR_MSG_PARAM, ErrorMSG);}
-                    if(!WarningMSG.equals("")){req.setAttribute(ERROR_MSG_PARAM, WarningMSG);}
-                    req.getRequestDispatcher("/meineFluege.jsp").forward(req, resp);
-                }  
+                }
+                if(!ErrorMSG.equals("")&& WarningMSG.equals("")){req.setAttribute(ERROR_MSG_PARAM, ErrorMSG);}
+                if(!WarningMSG.equals("")&& ErrorMSG.equals("")){req.setAttribute(ERROR_MSG_PARAM, WarningMSG);}
+                if(!WarningMSG.equals("") && !ErrorMSG.equals("")){req.setAttribute(ERROR_MSG_PARAM, WarningMSG + ErrorMSG);}
+                req.getRequestDispatcher("/meineFluege.jsp").forward(req, resp);
             }
         }
     }
