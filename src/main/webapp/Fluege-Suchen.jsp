@@ -91,17 +91,17 @@
             <hr /><br/>
            
             <sql:setDataSource dataSource="jdbc/FluegeDB" />
-              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE Abflugzeit > CURRENT_TIMESTAMP">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE Abflugzeit >= CURRENT_TIMESTAMP">
               </sql:query>
                       
             <c:if test="${not empty param.abflugPlanet}">
-              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND Abflugzeit > CURRENT_TIMESTAMP">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND Abflugzeit >= CURRENT_TIMESTAMP">
                 <sql:param value="%${param.abflugPlanet}%" />
               </sql:query>
             </c:if>
             
              <c:if test="${not empty param.ankunftPlanet}">
-              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE zielplanet like ? AND Abflugzeit > CURRENT_TIMESTAMP">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE zielplanet like ? AND Abflugzeit >= CURRENT_TIMESTAMP">
                  <sql:param value="%${param.ankunftPlanet}%"/>
               </sql:query>
             </c:if>
@@ -114,7 +114,7 @@
             
             
              <c:if test="${not empty param.abflugPlanet and not empty param.ankunftPlanet}">
-              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND Abflugzeit > CURRENT_TIMESTAMP">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND Abflugzeit >= CURRENT_TIMESTAMP">
                 <sql:param value="%${param.abflugPlanet}%" />
                  <sql:param value="%${param.ankunftPlanet}%"/>
               </sql:query>
@@ -136,7 +136,7 @@
             </c:if>
 
             <c:if test="${not empty param.abflugPlanet and not empty param.ankunftPlanet and not empty param.tag}">
-              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND abflugzeit like ? AND Abflugzeit > CURRENT_TIMESTAMP">
+              <sql:query var="flüge" sql="SELECT * FROM Flug WHERE abflugplanet like ? AND zielplanet like ? AND abflugzeit like ? AND Abflugzeit >= CURRENT_TIMESTAMP">
                 <sql:param value="%${param.abflugPlanet}%" />
                  <sql:param value="%${param.ankunftPlanet}%"/>
                  <sql:param value="${param.tag}%"/>
@@ -150,7 +150,7 @@
               <table class="data table-striped">
                 <tr><th>Flugnummer</th><th>Abflugplanet</th><th>Zielplanet</th><th>Abflugzeit</th><th>Ankunftszeit</th></tr>
                 <c:forEach var="flug" items="${flüge.rows}">
-                  <tr><td>${flug.flugnr}</td><td>${flug.abflugplanet}</td><td>${flug.zielplanet}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td><td><form action="${contextPath}/Fluege-Buchen.jsp" method="post"><button ${ outdated eq "false" ? 'disabled="disabled"' : ''} name="flugnr" value="${flug.flugnr}">Buchen</button></form></td></tr>
+                  <tr><td>${flug.flugnr}</td><td>${flug.abflugplanet}</td><td>${flug.zielplanet}</td><td>${flug.abflugzeit}</td><td>${flug.ankuftszeit}</td><td><form action="${contextPath}/Fluege-Buchen.jsp" method="post"><button name="flugnr" value="${flug.flugnr}">Buchen</button></form></td></tr>
                 </c:forEach>
               </table>
             </c:if>
